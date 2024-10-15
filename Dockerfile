@@ -1,5 +1,5 @@
 FROM openjdk
-MAINTAINER QingFeng
+MAINTAINER Alexwang
 VOLUME /tmp
 ADD target/kubeblog.jar /kubeblog.jar
 EXPOSE 9100

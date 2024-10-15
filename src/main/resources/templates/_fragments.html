@@ -4,7 +4,7 @@
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:replace="${title}">QingFeng's Blog</title>
+    <title th:replace="${title}">Alexwang's Blog</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.css">
     <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
     <link rel="stylesheet" href="../static/css/typo.css" th:href="@{/css/typo.css}">
@@ -20,7 +20,7 @@
 <nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini">
     <div class="ui container">
         <div class="ui inverted secondary stackable menu">
-            <h2 class="ui teal header item">QingFeng's Blog</h2>
+            <h2 class="ui teal header item">Alexwang's Blog</h2>
             <a href="#" th:href="@{/}" class="m-item item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="home icon"></i><span th:text="#{nav.index}">首页</span></a>
             <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i><span th:text="#{nav.types}">分类</span></a>
             <a href="#" th:href="@{/tags/-1}" class="m-item item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tags icon"></i><span th:text="#{nav.tags}">标签</span></a>
@@ -73,12 +73,12 @@
                 </div>
             </div>
             <div class="seven wide column">
-                <h4 class="ui inverted header m-text-thin m-text-spaced">QingFeng's Blog</h4>
+                <h4 class="ui inverted header m-text-thin m-text-spaced">Alexwang's Blog</h4>
                 <p class="m-text-thin m-text-spaced m-opacity-tiny" th:text="#{footer.describe}">这是我的个人博客，我会分享关于编程的任何内容，希望可以给来到这里的人一些帮助</p>
             </div>
         </div>
         <div class="ui inverted section divider"></div>
-        <p class="m-text-thin m-text-spaced m-opacity-mini">Copyright © 2020 QingFeng</p>
+        <p class="m-text-thin m-text-spaced m-opacity-mini">Copyright © 2020 Alexwang</p>
     </div>
 </footer>
 

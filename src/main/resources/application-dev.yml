@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://mysql-container:3306/blogDB?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1:3306/analysis?useUnicode=true&characterEncoding=utf-8
     username: root
     password: password
 #    data: classpath:data.sql
@@ -15,5 +15,5 @@ spring:
 logging:
   level:
     root: info
-    com.qingfeng.blog: debug
-  file: log/blog.log
+    com.alexwang.blog: debug
+  file: /tmp/blog.log

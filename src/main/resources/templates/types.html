@@ -3,7 +3,7 @@
     <head th:replace="_fragments :: head(~{::title})">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>QingFeng's Blog</title>
+        <title>Frog Analysis</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.css">
         <link rel="stylesheet" href="../static/css/me.css">
     </head>
@@ -51,7 +51,7 @@
                                         <div class="ui horizontal link list">
                                             <div class="item">
                                                 <img src="../static/images/wechat.jpg" th:src="@{/images/wechat.jpg}" alt="" class="ui avatar image" style="width: 40px;height: 40px">
-                                                <div class="content"><a href="#" class="header" th:text="${blog.user.nickname}">QingFeng</a></div>
+                                                <div class="content"><a href="#" class="header" th:text="${blog.user.nickname}">Alexwang</a></div>
                                             </div>
                                             <div class="item">
                                                 <i class="calendar icon"></i> <span th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd')}">2018-3-25</span>
