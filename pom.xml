@@ -108,6 +108,8 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>com.alexwang.blog.BlogApplication</mainClass>
+                    <jvmArguments>--add-opens java.base/java.lang=ALL-UNNAMED</jvmArguments>
+
                 </configuration>
             </plugin>
         </plugins>

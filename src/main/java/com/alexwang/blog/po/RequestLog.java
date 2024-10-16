@@ -1,3 +1,5 @@
+package com.alexwang.blog.po;
+
 import java.time.Instant;
 
 public class RequestLog {

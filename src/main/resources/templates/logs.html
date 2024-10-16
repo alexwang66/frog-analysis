@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>File Download Volume Over Time</title>
+    <!-- 引入 Semantic UI 样式表 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+
+    <!-- 引入 Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- 引入 date-fns 和 Chart.js 的日期适配器 -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
+
+    <!-- 引入 jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="ui container">
+    <h2 class="ui header">File Download Volume Over Time</h2>
+
+    <!-- 创建一个用于展示曲线图的 canvas -->
+    <canvas id="downloadVolumeChart" width="400" height="200"></canvas>
+
+    <!-- 使用 Thymeleaf 渲染未转义的时间标签数据 -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var ctx = document.getElementById('downloadVolumeChart').getContext('2d');
+            var downloadVolumeChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [(${timeLabelsForJs})],  // 时间标签
+                    datasets: [{
+                        label: 'Download Volume (GB)',
+                        data: [(${downloadVolumes})],  // 下载量
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'time',  // 设为时间轴
+                            time: {
+                                unit: 'minute',  // 按小时显示刻度
+                                stepSize: 1,   // 每隔 1 小时显示一个刻度
+                                min: '2024-08-09T08:00:00.000Z',  // 设置最小时间范围
+                                max: '2024-08-09T18:00:00.000Z',  // 设置最大时间范围
+                                tooltipFormat: 'yyyy/MM/dd HH:mm',  // 提示框中显示的时间格式
+                                displayFormats: {
+                                    hour: 'HH:mm'  // X轴上的时间格式
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Time (Hours)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                callback: function(value) {
+                                    return (value / (1024 * 1024 * 1024)).toFixed(2) + ' GB';  // 字节转换成 GB 并显示
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Download Volume (GB)'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</div>
+
+<!-- 引入 Semantic UI 的 JS 库 -->
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</body>
+</html>

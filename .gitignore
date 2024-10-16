@@ -26,3 +26,4 @@
 /.nb-gradle/
 log/*
 log/blog.log
+/data/

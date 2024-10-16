@@ -1,4 +1,7 @@
 package com.alexwang.blog;
+import com.alexwang.blog.aspect.logAspect;
+import com.alexwang.blog.po.RequestLog;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
