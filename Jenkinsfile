@@ -31,13 +31,13 @@ pipeline {
             parallel{
                 stage ('Deploy to Staging'){
                     steps {
-                        sh "mv /Users/Shared/Jenkins/Home/workspace/blog/target/*.war /Users/Shared/Jenkins/Home/workspace/blog/target/ROOT.war"
+                        sh "mv /Users/Shared/Jenkins/Home/workspace/analysis/target/*.war /Users/Shared/Jenkins/Home/workspace/analysis/target/ROOT.war"
                     }
                 }
 
                 stage ('Deploy to Production'){
                     steps {
-                        sh "mv /Users/Shared/Jenkins/Home/workspace/blog/target/*.war /Users/Shared/Jenkins/Home/workspace/blog/target/ROOT.war"
+                        sh "mv /Users/Shared/Jenkins/Home/workspace/analysis/target/*.war /Users/Shared/Jenkins/Home/workspace/analysis/target/ROOT.war"
                     }
                 }
 

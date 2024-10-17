@@ -16,4 +16,4 @@ logging:
   level:
     root: info
     com.alexwang.blog: debug
-  file: /tmp/blog.log
+  file: /tmp/analysis.log

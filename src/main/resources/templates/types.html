@@ -34,16 +34,16 @@
                 <div class="ui attached segment m-padded-tb-large">
                     <div class="ui labeled button m-margin-tb-tiny" th:each="type : ${types}">
                         <a href="#" th:href="@{/types/{id}(id=${type.id})}" class="ui basic button" th:classappend="${type.id==activeTypeId} ? 'teal'" th:text="${type.name}">思考与感悟</a>
-                        <div class="ui basic left pointing label" th:classappend="${type.id==activeTypeId} ? 'teal'" th:text="${#arrays.length(type.blogs)}">24</div>
+                        <div class="ui basic left pointing label" th:classappend="${type.id==activeTypeId} ? 'teal'" th:text="${#arrays.length(type.analyses)}">24</div>
                     </div>
                 </div>
 
                 <div class="ui top attached teal segment">
-                    <div class="ui m-padded vertical segment m-padded-lr-wide m-padded-tb-large" th:each="blog : ${page.content}">
+                    <div class="ui m-padded vertical segment m-padded-lr-wide m-padded-tb-large" th:each="analysis : ${page.content}">
                         <div class="ui middle aligned mobile reversed stackable grid">
                             <div class="eleven wide column">
-                                <h3 class="ui header"><a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="m-black" th:text="${blog.title}">深入理解JAVA虚拟机</a></h3>
-                                <p class="m-text" th:text="|${blog.description}...|">A deeply ashamed Australian captain Steve Smith has admitted his team deliberately conspired to cheat on the third day of the third test by having Cameron Bancroft use tape to illegally tamper with the ball.
+                                <h3 class="ui header"><a href="#" th:href="@{/analysis/{id}(id=${analysis.id})}" target="_blank" class="m-black" th:text="${analysis.title}">深入理解JAVA虚拟机</a></h3>
+                                <p class="m-text" th:text="|${analysis.description}...|">A deeply ashamed Australian captain Steve Smith has admitted his team deliberately conspired to cheat on the third day of the third test by having Cameron Bancroft use tape to illegally tamper with the ball.
                                     While Bancroft has been charged by match referee Andy Pycroft and faces a one-test suspension the reputation of Smith and the Australian team is in tatters.
                                 </p>
                                 <div class="ui grid">
@@ -51,24 +51,24 @@
                                         <div class="ui horizontal link list">
                                             <div class="item">
                                                 <img src="../static/images/wechat.jpg" th:src="@{/images/wechat.jpg}" alt="" class="ui avatar image" style="width: 40px;height: 40px">
-                                                <div class="content"><a href="#" class="header" th:text="${blog.user.nickname}">Alexwang</a></div>
+                                                <div class="content"><a href="#" class="header" th:text="${analysis.user.nickname}">Alexwang</a></div>
                                             </div>
                                             <div class="item">
-                                                <i class="calendar icon"></i> <span th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd')}">2018-3-25</span>
+                                                <i class="calendar icon"></i> <span th:text="${#dates.format(analysis.updateTime, 'yyyy-MM-dd')}">2018-3-25</span>
                                             </div>
                                             <div class="item">
-                                                <i class="eye icon"></i> <span th:text="${blog.views}">2342</span>
+                                                <i class="eye icon"></i> <span th:text="${analysis.views}">2342</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="right aligned five wide column middle aligned">
-                                        <a href="#" target="_blank" class="ui teal label basic m-padded-tb-mini m-text-thin" th:text="${blog.type.name}">认知升级</a>
+                                        <a href="#" target="_blank" class="ui teal label basic m-padded-tb-mini m-text-thin" th:text="${analysis.type.name}">认知升级</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="five wide column middle aligned">
-                                <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
-<!--                                    <img src="/images/wechat1.jpg" th:src="@{${blog.firstPicture}}" alt="" class="ui rounded image" style="width: 400px;height: 200px">-->
+                                <a href="#" th:href="@{/analysis/{id}(id=${analysis.id})}" target="_blank">
+<!--                                    <img src="/images/wechat1.jpg" th:src="@{${analysis.firstPicture}}" alt="" class="ui rounded image" style="width: 400px;height: 200px">-->
                                 </a>
                             </div>
                         </div>

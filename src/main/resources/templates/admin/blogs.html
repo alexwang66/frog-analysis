@@ -37,8 +37,8 @@
         <div class="ui attached pointing menu">
             <div class="ui container">
                 <div class="right menu">
-                    <a href="#" th:href="@{/admin/blogs/input}" class=" item">Publish</a>
-                    <a href="#" th:href="@{/admin/blogs}" class="teal active item">List</a>
+                    <a href="#" th:href="@{/admin/analyses/input}" class=" item">Publish</a>
+                    <a href="#" th:href="@{/admin/analyses}" class="teal active item">List</a>
                 </div>
             </div>
         </div>
@@ -98,16 +98,16 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="blog,iterStat : ${page.content}">
+                        <tr th:each="analysis,iterStat : ${page.content}">
                             <td th:text="${iterStat.count}">1</td>
-                            <td th:text="${blog.title}"></td>
-                            <td th:text="${blog.type.name}"></td>
-                            <td th:text="${blog.recommend} ? 'Yes' : 'No'">Yes</td>
-                            <td th:text="${blog.published} ? 'Published' : 'Draft'">Draft</td>
-                            <td th:text="${blog.updateTime}">2020-10-02 09:45</td>
+                            <td th:text="${analysis.title}"></td>
+                            <td th:text="${analysis.type.name}"></td>
+                            <td th:text="${analysis.recommend} ? 'Yes' : 'No'">Yes</td>
+                            <td th:text="${analysis.published} ? 'Published' : 'Draft'">Draft</td>
+                            <td th:text="${analysis.updateTime}">2020-10-02 09:45</td>
                             <td>
-                                <a href="#" th:href="@{/admin/blogs/{id}/input(id=${blog.id})}" class="ui mini teal basic button">Edit</a>
-                                <a href="#" th:href="@{/admin/blogs/{id}/delete(id=${blog.id})}" class="ui mini red basic button">Delete</a>
+                                <a href="#" th:href="@{/admin/analyses/{id}/input(id=${analysis.id})}" class="ui mini teal basic button">Edit</a>
+                                <a href="#" th:href="@{/admin/analyses/{id}/delete(id=${analysis.id})}" class="ui mini red basic button">Delete</a>
                             </td>
                         </tr>
                         </tbody>
@@ -118,7 +118,7 @@
                                     <a onclick="page(this)" th:attr="data-page=${page.number}-1" class=" item" th:unless="${page.first}">Last Page</a>
                                     <a onclick="page(this)" th:attr="data-page=${page.number}+1" class=" item" th:unless="${page.last}">Next Page</a>
                                 </div>
-                                <a href="#" th:href="@{/admin/blogs/input}" class="ui mini right floated teal basic button">Add new blog</a>
+                                <a href="#" th:href="@{/admin/analyses/input}" class="ui mini right floated teal basic button">Add new analysis</a>
                             </th>
                         </tr>
                         </tfoot>
@@ -187,7 +187,7 @@
             }
 
             function loaddata() {
-                $("#table-container").load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search",{
+                $("#table-container").load(/*[[@{/admin/analyses/search}]]*/"/admin/analyses/search",{
                     title : $("[name='title']").val(),
                     typeId : $("[name='typeId']").val(),
                     recommend : $("[name='recommend']").prop('checked'),

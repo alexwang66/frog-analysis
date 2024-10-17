@@ -39,8 +39,8 @@
 <div class="ui attached pointing menu">
     <div class="ui container">
         <div class="right menu">
-            <a href="#" th:href="@{/admin/blogs/input}" class="teal active item">Publish</a>
-            <a href="#" th:href="@{/admin/blogs}" class="item">List</a>
+            <a href="#" th:href="@{/admin/analyses/input}" class="teal active item">Publish</a>
+            <a href="#" th:href="@{/admin/analyses}" class="item">List</a>
         </div>
     </div>
 </div>
@@ -48,7 +48,7 @@
 <!--中间内容-->
 <div  class="m-container m-padded-tb-big">
     <div class="ui container">
-        <form id="blog-form" action="#" th:object="${blog}" th:action="@{/admin/blogs}" method="post" class="ui form">
+        <form id="analysis-form" action="#" th:object="${analysis}" th:action="@{/admin/analyses}" method="post" class="ui form">
             <input type="hidden" name="published">
             <input type="hidden" name="id" th:value="*{id}">
             <div class="required field">
@@ -191,13 +191,13 @@
 
     $('#save-btn').click(function () {
         $('[name="published"]').val(false);
-        $('#blog-form').submit();
+        $('#analysis-form').submit();
     });
 
 
     $('#publish-btn').click(function () {
         $('[name="published"]').val(true);
-        $('#blog-form').submit();
+        $('#analysis-form').submit();
     });
 
     $('.ui.tag.dropdown').dropdown({
@@ -211,21 +211,21 @@
                 identifier: 'title',
                 rules: [{
                     type : 'empty',
-                    prompt: 'Title: Please enter blog title'
+                    prompt: 'Title: Please enter analysis title'
                 }]
             },
             content : {
                 identifier: 'content',
                 rules: [{
                     type : 'empty',
-                    prompt: 'Title: Please enter blog content'
+                    prompt: 'Title: Please enter analysis content'
                 }]
             },
             typeId : {
                 identifier: 'type.id',
                 rules: [{
                     type : 'empty',
-                    prompt: 'Title: Please enter blog type'
+                    prompt: 'Title: Please enter analysis type'
                 }]
             },
             firstPicture : {

@@ -16,8 +16,8 @@
 <div class="ui container">
     <h2 class="ui header">File Download Volume Over Time</h2>
 
-    <!-- 创建一个用于展示 ECharts 图表的 div -->
-    <div id="downloadVolumeChart" style="width: 1000px; height: 800px;"></div>
+    <!-- 创建一个用于展示 ECharts 图表的 div，设置宽度为 800px，高度为 1000px -->
+    <div id="downloadVolumeChart" style="width: 800px; height: 1000px;"></div>
 
     <!-- 使用 Thymeleaf 渲染未转义的时间标签数据 -->
     <script type="text/javascript">
@@ -62,7 +62,30 @@
                     itemStyle: {
                         color: 'rgba(75, 192, 192, 0.8)'
                     }
-                }]
+                }],
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        start: 0,
+                        end: 100,
+                        zoomLock: true,  // 锁定缩放范围，避免用户无意中缩得太小
+                        maxValueSpan: 10,  // 最大可显示 10 个数据点
+                        minValueSpan: 5    // 最小可显示 5 个数据点
+                    },
+                    {
+                        type: 'inside',
+                        zoomOnMouseWheel: true, // 鼠标滚轮滚动控制缩放
+                        moveOnMouseMove: true  // 鼠标移动控制滚动
+                    }
+                ],
+                toolbox: {
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none' // 仅在 X 轴上启用缩放
+                        },
+                        restore: {}, // 恢复按钮
+                    }
+                }
             };
 
             // 使用刚指定的配置项和数据显示图表
