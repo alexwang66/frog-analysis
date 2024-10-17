@@ -6,11 +6,8 @@
     <!-- 引入 Semantic UI 样式表 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
 
-    <!-- 引入 Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- 引入 date-fns 和 Chart.js 的日期适配器 -->
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
+    <!-- 引入 ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 
     <!-- 引入 jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -19,59 +16,57 @@
 <div class="ui container">
     <h2 class="ui header">File Download Volume Over Time</h2>
 
-    <!-- 创建一个用于展示曲线图的 canvas -->
-    <canvas id="downloadVolumeChart" width="400" height="200"></canvas>
+    <!-- 创建一个用于展示 ECharts 图表的 div -->
+    <div id="downloadVolumeChart" style="width: 1000px; height: 800px;"></div>
 
     <!-- 使用 Thymeleaf 渲染未转义的时间标签数据 -->
     <script type="text/javascript">
         $(document).ready(function() {
-            var ctx = document.getElementById('downloadVolumeChart').getContext('2d');
-            var downloadVolumeChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [(${timeLabelsForJs})],  // 时间标签
-                    datasets: [{
-                        label: 'Download Volume (GB)',
-                        data: [(${downloadVolumes})],  // 下载量
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                        fill: false
-                    }]
+            // 初始化 ECharts 实例
+            var downloadVolumeChart = echarts.init(document.getElementById('downloadVolumeChart'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: 'File Download Volume Over Time'
                 },
-                options: {
-                    scales: {
-                        x: {
-                            type: 'time',  // 设为时间轴
-                            time: {
-                                unit: 'minute',  // 按小时显示刻度
-                                stepSize: 1,   // 每隔 1 小时显示一个刻度
-                                min: '2024-08-09T08:00:00.000Z',  // 设置最小时间范围
-                                max: '2024-08-09T18:00:00.000Z',  // 设置最大时间范围
-                                tooltipFormat: 'yyyy/MM/dd HH:mm',  // 提示框中显示的时间格式
-                                displayFormats: {
-                                    hour: 'HH:mm'  // X轴上的时间格式
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Time (Hours)'
-                            }
-                        },
-                        y: {
-                            ticks: {
-                                callback: function(value) {
-                                    return (value / (1024 * 1024 * 1024)).toFixed(2) + ' GB';  // 字节转换成 GB 并显示
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Download Volume (GB)'
-                            }
-                        }
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
                     }
-                }
-            });
+                },
+                xAxis: {
+                    type: 'category',
+                    data: [(${timeLabelsForJs})],  // 时间标签
+                    axisLabel: {
+                        formatter: function (value) {
+                            return echarts.format.formatTime('MM/dd hh:mm', value);  // 格式化时间显示
+                        }
+                    },
+                    name: 'Time (Hours)'
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: function (value) {
+                            return (value / (1024 * 1024 * 1024)).toFixed(2) + ' GB';  // 字节转换成 GB 并显示
+                        }
+                    },
+                    name: 'Download Volume (GB)'
+                },
+                series: [{
+                    name: 'Download Volume (GB)',
+                    type: 'bar',
+                    data: [(${downloadVolumes})],  // 下载量
+                    itemStyle: {
+                        color: 'rgba(75, 192, 192, 0.8)'
+                    }
+                }]
+            };
+
+            // 使用刚指定的配置项和数据显示图表
+            downloadVolumeChart.setOption(option);
         });
     </script>
 </div>
