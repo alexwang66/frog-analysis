@@ -49,6 +49,48 @@ public class LogController {
         return "logs"; // 返回日志视图 (logs.html)
     }
 
+    @GetMapping("/speed")
+    public String getSpeed(Model model) {
+        List<RequestLog> logs = parseLogFile();  // 解析日志文件
+
+        // 初始化时间标签和每秒下载速度列表
+        List<String> timeLabels = new ArrayList<>();
+        List<Long> downloadSpeeds = new ArrayList<>();  // 使用 Long 类型
+
+        // 定义字节到 MB 的转换系数
+        long bytesToMB = 1024 * 1024;
+
+        // 遍历日志，计算每秒下载量
+        for (int i = 1; i < logs.size(); i++) {
+            RequestLog previousLog = logs.get(i - 1);
+            RequestLog currentLog = logs.get(i);
+
+            // 使用 toEpochMilli() 获取时间戳，计算时间差（秒）
+            long timeDifferenceInSeconds = (currentLog.getTimestamp().toEpochMilli() - previousLog.getTimestamp().toEpochMilli()) / 1000;
+            if (timeDifferenceInSeconds == 0) {
+                continue;  // 跳过时间间隔为0的情况
+            }
+
+            // 计算下载量差（字节），然后计算每秒下载量并转换为 MB/s
+            long dataDifference = currentLog.getDataSize() - previousLog.getDataSize();
+            long speedInMBPerSecond = (dataDifference / bytesToMB) / timeDifferenceInSeconds;
+
+            // 添加时间标签和下载速度
+            timeLabels.add(currentLog.getTimestamp().toString());  // 你可以根据需要格式化日期
+            downloadSpeeds.add(speedInMBPerSecond);  // 单位为 MB/s
+        }
+
+        // 将时间标签处理为合法的 JavaScript 字符串数组格式
+        String timeLabelsForJs = "[" + timeLabels.stream()
+                .map(label -> "\"" + label + "\"")
+                .collect(Collectors.joining(", ")) + "]";
+
+        // 将每秒下载速度传递给视图
+        model.addAttribute("timeLabelsForJs", timeLabelsForJs);
+        model.addAttribute("downloadSpeeds", downloadSpeeds);  // MB/s 数据传递到前端
+
+        return "speed"; // 返回显示速度的视图 (speed.html)
+    }
 
     // 使用 ResourceLoader 读取类路径中的日志文件
     private List<RequestLog> parseLogFile() {

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>File Download Volume Over Time</title>
+    <title>Download Speed Over Time</title>
     <!-- 引入 Semantic UI 样式表 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
 
@@ -14,30 +14,26 @@
 </head>
 <body>
 <div class="ui container">
-    <h2 class="ui header">File Download Volume Over Time</h2>
+    <h2 class="ui header">Download Speed (MB per Second) Over Time</h2>
 
-    <!-- 创建一个用于展示 ECharts 图表的 div，设置宽度为 800px，高度为 1000px -->
-    <div id="downloadVolumeChart" style="width: 800px; height: 1000px;"></div>
+    <!-- 创建一个用于展示 ECharts 图表的 div -->
+    <div id="downloadSpeedChart" style="width: 800px; height: 600px;"></div>
 
-    <!-- 使用 Thymeleaf 渲染未转义的时间标签数据 -->
+    <!-- 使用 Thymeleaf 渲染未转义的时间标签和每秒下载速度数据 -->
     <script type="text/javascript">
         $(document).ready(function() {
             // 初始化 ECharts 实例
-            var downloadVolumeChart = echarts.init(document.getElementById('downloadVolumeChart'));
+            var downloadSpeedChart = echarts.init(document.getElementById('downloadSpeedChart'));
 
             // 指定图表的配置项和数据
             var option = {
                 title: {
-                    text: 'File Download Volume Over Time'
+                    text: 'Download Speed (MB per Second) Over Time'
                 },
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
-                        type: 'shadow'
-                    },
-                    formatter: function (params) {
-                        var date = new Date(params[0].axisValue);
-                        return echarts.format.formatTime('MM/dd hh:mm', date) + '<br/>' + params[0].seriesName + ': ' + params[0].data;
+                        type: 'line'
                     }
                 },
                 xAxis: {
@@ -45,7 +41,7 @@
                     data: [(${timeLabelsForJs})],  // 时间标签
                     axisLabel: {
                         formatter: function (value) {
-                            return echarts.format.formatTime('MM/dd hh:mm', value);  // 格式化为 12 小时制
+                            return echarts.format.formatTime('MM/dd hh:mm', value);  // 格式化时间
                         }
                     },
                     name: 'Time (Hours)'
@@ -54,48 +50,48 @@
                     type: 'value',
                     axisLabel: {
                         formatter: function (value) {
-                            return (value / (1024 * 1024 * 1024)).toFixed(2) + ' GB';  // 字节转换成 GB 并显示
+                            return value + ' MB/s';  // 显示为 MB/s 单位
                         }
                     },
-                    name: 'Download Volume (GB)'
+                    name: 'Download Speed (MB/s)'  // Y轴单位为 MB/s
                 },
                 series: [{
-                    name: 'Download Volume (GB)',
-                    type: 'bar',
-                    data: [(${downloadVolumes})],  // 下载量
+                    name: 'Download Speed (MB/s)',
+                    type: 'line',
+                    data: [(${downloadSpeeds})],  // 下载速度 (MB/s)
+                    smooth: true,  // 平滑显示折线
                     itemStyle: {
                         color: 'rgba(75, 192, 192, 0.8)'
                     }
                 }],
-                dataZoom: [
-                    {
-                        type: 'slider', // 仅针对 x 轴的滑动条组件
-                        start: 0,
-                        end: 100
-                    },
-                    {
-                        type: 'inside', // 支持 x 轴的鼠标滚动缩放
-                        xAxisIndex: 0,
-                        start: 0,
-                        end: 100
-                    }
-                ],
                 toolbox: {
                     feature: {
                         restore: { // 添加重置按钮
                             title: 'Reset',
-                            icon: 'path://M0 0h24v24H0z', // 图标可以自定义或使用内置图标
                             show: true
                         },
                         dataZoom: {
-                            yAxisIndex: 'none' // 只对 x 轴启用缩放
+                            yAxisIndex: 'none' // 启用 x 轴缩放
                         }
                     }
-                }
+                },
+                dataZoom: [
+                    {
+                        type: 'slider', // x 轴滑动条组件
+                        start: 0,
+                        end: 100
+                    },
+                    {
+                        type: 'inside', // 支持 x 轴鼠标滚动缩放
+                        xAxisIndex: 0,
+                        start: 0,
+                        end: 100
+                    }
+                ]
             };
 
             // 使用刚指定的配置项和数据显示图表
-            downloadVolumeChart.setOption(option);
+            downloadSpeedChart.setOption(option);
         });
     </script>
 </div>
