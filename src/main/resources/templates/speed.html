@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Download Speed Over Time</title>
+    <title>Download Speed, Requested Volumes, and Concurrent Connections</title>
     <!-- 引入 Semantic UI 样式表 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
 
@@ -16,17 +16,33 @@
 <div class="ui container">
     <h2 class="ui header">Download Speed (MB per Second) Over Time</h2>
 
-    <!-- 创建一个用于展示 ECharts 图表的 div -->
-    <div id="downloadSpeedChart" style="width: 800px; height: 600px;"></div>
+    <!-- 创建一个用于展示下载速度的 ECharts 图表的 div -->
+    <div id="downloadSpeedChart" style="width: 800px; height: 400px;"></div>
+    <!-- 重置按钮 -->
+    <button id="resetDownloadSpeedChart" class="ui button">Reset Download Speed Chart</button>
 
-    <!-- 使用 Thymeleaf 渲染未转义的时间标签和每秒下载速度数据 -->
+    <h2 class="ui header">Requested Volumes (MB) Over Time</h2>
+
+    <!-- 创建一个用于展示请求量的 ECharts 图表的 div -->
+    <div id="requestedVolumesChart" style="width: 800px; height: 400px;"></div>
+    <!-- 重置按钮 -->
+    <button id="resetRequestedVolumesChart" class="ui button">Reset Requested Volumes Chart</button>
+
+    <h2 class="ui header">Concurrent HTTP Connections Per Second</h2>
+
+    <!-- 创建一个用于展示并发连接数的 ECharts 图表的 div -->
+    <div id="concurrentConnectionsChart" style="width: 800px; height: 400px;"></div>
+    <!-- 重置按钮 -->
+    <button id="resetConcurrentConnectionsChart" class="ui button">Reset Concurrent Connections Chart</button>
+
+    <!-- 使用 Thymeleaf 渲染未转义的时间标签、下载速度、请求量和并发连接数 -->
     <script type="text/javascript">
         $(document).ready(function() {
-            // 初始化 ECharts 实例
+            // 初始化 ECharts 实例 (下载速度)
             var downloadSpeedChart = echarts.init(document.getElementById('downloadSpeedChart'));
 
-            // 指定图表的配置项和数据
-            var option = {
+            // 下载速度图表的配置项和数据
+            var downloadSpeedOption = {
                 title: {
                     text: 'Download Speed (MB per Second) Over Time'
                 },
@@ -41,16 +57,16 @@
                     data: [(${timeLabelsForJs})],  // 时间标签
                     axisLabel: {
                         formatter: function (value) {
-                            return echarts.format.formatTime('MM/dd hh:mm', value);  // 格式化时间
+                            return echarts.format.formatTime('MM/dd hh:mm:ss', value);  // 格式化时间
                         }
                     },
-                    name: 'Time (Hours)'
+                    name: 'Time (Seconds)'
                 },
                 yAxis: {
                     type: 'value',
                     axisLabel: {
                         formatter: function (value) {
-                            return value + ' MB/s';  // 显示为 MB/s 单位
+                            return value.toFixed(3);  // 显示为小数点后三位的 MB/s 单位
                         }
                     },
                     name: 'Download Speed (MB/s)'  // Y轴单位为 MB/s
@@ -64,34 +80,134 @@
                         color: 'rgba(75, 192, 192, 0.8)'
                     }
                 }],
-                toolbox: {
-                    feature: {
-                        restore: { // 添加重置按钮
-                            title: 'Reset',
-                            show: true
-                        },
-                        dataZoom: {
-                            yAxisIndex: 'none' // 启用 x 轴缩放
-                        }
-                    }
-                },
-                dataZoom: [
-                    {
-                        type: 'slider', // x 轴滑动条组件
-                        start: 0,
-                        end: 100
-                    },
-                    {
-                        type: 'inside', // 支持 x 轴鼠标滚动缩放
-                        xAxisIndex: 0,
-                        start: 0,
-                        end: 100
-                    }
-                ]
+                dataZoom: [{
+                    type: 'slider',
+                    start: 0,
+                    end: 100
+                }]
             };
 
-            // 使用刚指定的配置项和数据显示图表
-            downloadSpeedChart.setOption(option);
+            // 使用指定的配置项和数据显示下载速度图表
+            downloadSpeedChart.setOption(downloadSpeedOption);
+
+            // 重置按钮点击事件
+            $('#resetDownloadSpeedChart').click(function() {
+                downloadSpeedChart.setOption(downloadSpeedOption);  // 重置图表
+            });
+
+            // 初始化 ECharts 实例 (请求量)
+            var requestedVolumesChart = echarts.init(document.getElementById('requestedVolumesChart'));
+
+            // 请求量图表的配置项和数据
+            var requestedVolumesOption = {
+                title: {
+                    text: 'Requested Volumes (MB) Over Time'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'line'
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: [(${timeLabelsForJs})],  // 时间标签
+                    axisLabel: {
+                        formatter: function (value) {
+                            return echarts.format.formatTime('MM/dd hh:mm:ss', value);  // 格式化时间
+                        }
+                    },
+                    name: 'Time (Seconds)'
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: function (value) {
+                            return value.toFixed(3);  // 显示为小数点后三位的 MB
+                        }
+                    },
+                    name: 'Requested Volumes (MB)'
+                },
+                series: [{
+                    name: 'Requested Volumes',
+                    type: 'line',
+                    data: [(${requestedVolumes})],  // 请求量 (MB)
+                    smooth: true,  // 平滑显示折线
+                    itemStyle: {
+                        color: 'rgba(153, 102, 255, 0.8)'
+                    }
+                }],
+                dataZoom: [{
+                    type: 'slider',
+                    start: 0,
+                    end: 100
+                }]
+            };
+
+            // 使用指定的配置项和数据显示请求量图表
+            requestedVolumesChart.setOption(requestedVolumesOption);
+
+            // 重置按钮点击事件
+            $('#resetRequestedVolumesChart').click(function() {
+                requestedVolumesChart.setOption(requestedVolumesOption);  // 重置图表
+            });
+
+            // 初始化 ECharts 实例 (并发连接数)
+            var concurrentConnectionsChart = echarts.init(document.getElementById('concurrentConnectionsChart'));
+
+            // 并发连接数图表的配置项和数据
+            var concurrentConnectionsOption = {
+                title: {
+                    text: 'Concurrent HTTP Connections Per Second'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'line'
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: [(${timeLabelsForJs})],  // 时间标签
+                    axisLabel: {
+                        formatter: function (value) {
+                            return echarts.format.formatTime('MM/dd hh:mm:ss', value);  // 格式化时间
+                        }
+                    },
+                    name: 'Time (Seconds)'
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: function (value) {
+                            return value;  // 不加单位，直接返回数值
+                        }
+                    },
+                    name: 'Concurrent Connections'
+                },
+                series: [{
+                    name: 'Concurrent Connections',
+                    type: 'line',
+                    data: [(${concurrentConnections})],  // 并发连接数
+                    smooth: true,  // 平滑显示折线
+                    itemStyle: {
+                        color: 'rgba(255, 99, 132, 0.8)'
+                    }
+                }],
+                dataZoom: [{
+                    type: 'slider',
+                    start: 0,
+                    end: 100
+                }]
+            };
+
+            // 使用指定的配置项和数据显示并发连接数图表
+            concurrentConnectionsChart.setOption(concurrentConnectionsOption);
+
+            // 重置按钮点击事件
+            $('#resetConcurrentConnectionsChart').click(function() {
+                concurrentConnectionsChart.setOption(concurrentConnectionsOption);  // 重置图表
+            });
         });
     </script>
 </div>
