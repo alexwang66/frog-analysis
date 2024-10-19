@@ -11,7 +11,7 @@ public class UserServiceImp implements UserService{
 
     @Autowired
     private UserRepository userRepository;
-    private String DEFALT_AVATAR_URL = "/images/wechat.jpg";
+    private String DEFALT_AVATAR_URL = "/images/JFROG.png";
 
     @Override
     public User checkuser(String username, String password) {

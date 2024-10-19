@@ -6,29 +6,61 @@
     <title>JFrog Analysis</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.css">
     <link rel="stylesheet" href="../static/css/me.css">
+
+    <style>
+        /* Ensure the html and body take the full height */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        /* Flexbox layout for wrapper to ensure footer is at the bottom */
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;  /* Full viewport height */
+        }
+
+        /* Content takes the remaining space */
+        .content {
+            flex: 1;
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+    </style>
 </head>
 <body>
-<!--导航-->
-<nav th:replace="_fragments :: menu(1)" class="ui inverted attached segment m-padded-tb-mini"></nav>
+<div class="wrapper">
+    <!--导航-->
+    <nav th:replace="_fragments :: menu(1)" class="ui inverted attached segment m-padded-tb-mini"></nav>
 
-<!--中间内容-->
-<div class="m-container m-padded-tb-big">
-    <div class="ui container">
-        <h2 class="ui header">Upload Log File for Analysis</h2>
+    <!--中间内容-->
+    <div class="content m-container m-padded-tb-big">
+        <div class="ui container">
+            <h2 class="ui header">Upload Log File for Analysis</h2>
 
-        <!-- File upload form, which posts to the backend directly -->
-        <form id="logUploadForm" class="ui form" method="post" enctype="multipart/form-data" action="/upload-log">
-            <div class="field">
-                <label for="logFile">Choose log file to upload:</label>
-                <input type="file" id="logFile" name="logFile" accept=".log" required>
-            </div>
-            <button class="ui button primary" type="submit">Upload and Analyze</button>
-        </form>
+            <!-- File upload form, which posts to the backend directly -->
+            <form id="logUploadForm" class="ui form" method="post" enctype="multipart/form-data" action="/upload-log">
+                <div class="field">
+                    <label for="logFile">Choose log file to upload:</label>
+                    <input type="file" id="logFile" name="logFile" accept=".log" required>
+                </div>
+                <button class="ui button primary" type="submit">Upload and Analyze</button>
+            </form>
+        </div>
     </div>
-</div>
 
-<!--底部footer-->
-<footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive"></footer>
+    <!--底部footer-->
+    <footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+        <p>Footer content goes here</p>
+    </footer>
+</div>
 
 <!--/*/<th:block th:replace="_fragments :: script">/*/-->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
