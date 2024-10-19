@@ -13,8 +13,16 @@ public class Tag {
     private Long id;
     private String name;
 
+    public List<Analysis> getAnalysis() {
+        return analysis;
+    }
+
+    public void setAnalysis(List<Analysis> analysis) {
+        this.analysis = analysis;
+    }
+
     @ManyToMany(mappedBy = "tags")
-    private List<Analysis> analyses = new ArrayList<>();
+    private List<Analysis> analysis = new ArrayList<>();
 
     public Tag() {
     }
@@ -35,13 +43,7 @@ public class Tag {
         this.name = name;
     }
 
-    public List<Analysis> getBlogs() {
-        return analyses;
-    }
 
-    public void setBlogs(List<Analysis> analyses) {
-        this.analyses = analyses;
-    }
 
     @Override
     public String toString() {

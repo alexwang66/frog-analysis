@@ -17,7 +17,7 @@ public class Type {
     private String name;
 
     @OneToMany(mappedBy = "type")
-    private List<Analysis> analyses = new ArrayList<>();
+    private List<Analysis> analysis = new ArrayList<>();
 
 
     public Type() {
@@ -40,11 +40,11 @@ public class Type {
     }
 
     public List<Analysis> getBlogs() {
-        return analyses;
+        return analysis;
     }
 
     public void setBlogs(List<Analysis> analyses) {
-        this.analyses = analyses;
+        this.analysis = analyses;
     }
 
     @Override
