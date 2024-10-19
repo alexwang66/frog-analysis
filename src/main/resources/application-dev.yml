@@ -20,3 +20,7 @@ logging:
     root: info
     com.alexwang.blog: debug
   file: /tmp/analysis.log
+app:
+  default:
+    user: ${APP_DEFAULT_USER:admin}        # Use environment variable or fallback to 'admin'
+    password: ${APP_DEFAULT_PASSWORD:password}  # Use environment variable or fallback to 'password'

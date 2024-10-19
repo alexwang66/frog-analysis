@@ -7,6 +7,7 @@ import com.alexwang.analysis.service.TagService;
 import com.alexwang.analysis.service.TypeService;
 import com.alexwang.analysis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,37 +25,40 @@ public class InitAdminConfig {
     @Autowired
     private TagService tagService;
 
+    // Inject admin user and password from application.yml or environment variables
+    @Value("${app.default.user}")
+    private String defaultAdminUsername;
+
+    @Value("${app.default.password}")
+    private String defaultAdminPassword;
+
     @Bean
     public User initAdminUser() {
 
-        //init types
+        // Initialize types if empty
         List<Type> types = typeService.listType();
-
-        if(types.isEmpty()){
+        if (types.isEmpty()) {
             Type newType = new Type();
             newType.setName("技术");
             newType.setId(Long.valueOf(1));
             typeService.saveType(newType);
         }
 
-        //init tags
+        // Initialize tags if empty
         List<Tag> tags = tagService.listTag();
-        if(tags.isEmpty()){
+        if (tags.isEmpty()) {
             Tag newTag = new Tag();
             newTag.setId(Long.valueOf(1));
             newTag.setName("docker");
             tagService.saveTag(newTag);
         }
 
-//        init Admin user
-        User user = userService.checkuser("admin", "password");
-        if(user == null){
-            return userService.saveUser("admin","password");
+        // Initialize Admin user using injected username and password from application.yml
+        User user = userService.checkuser(defaultAdminUsername, defaultAdminPassword);
+        if (user == null) {
+            return userService.saveUser(defaultAdminUsername, defaultAdminPassword);
         } else {
             return user;
         }
-
-
-
     }
 }
