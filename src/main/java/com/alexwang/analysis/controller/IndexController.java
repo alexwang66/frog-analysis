@@ -35,7 +35,7 @@ public class IndexController {
         redirectAttributes.addFlashAttribute("logs", logs);
 
         // Redirect to the speed page where logs will be analyzed and displayed
-        return "redirect:/speed";
+        return "redirect:/requestLog";
     }
 
 

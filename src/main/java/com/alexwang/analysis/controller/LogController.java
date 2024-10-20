@@ -4,8 +4,6 @@ import com.alexwang.analysis.po.RequestLog;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -35,8 +33,8 @@ public class LogController {
 //    }
 
     // Speed analysis page, now receiving the parsed logs from the model
-    @GetMapping("/speed")
-    public String getSpeed(Model model) {
+    @GetMapping("/requestLog")
+    public String getRequestLog(Model model) {
         // Get the parsed logs from the model
         List<RequestLog> logs = (List<RequestLog>) model.asMap().get("logs");
 
@@ -95,7 +93,7 @@ public class LogController {
         model.addAttribute("requestedVolumes", requestedVolumes);
         model.addAttribute("concurrentConnections", concurrentConnections);
 
-        return "speed";
+        return "requestLog";
     }
 
     // Method to parse the uploaded log file
