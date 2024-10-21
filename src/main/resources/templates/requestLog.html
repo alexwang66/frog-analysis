@@ -14,6 +14,25 @@
 </head>
 <body>
 <div class="ui container">
+
+    <!-- Add a table to display the top 10 downloaded files -->
+    <h3>Top 10 Downloaded Files</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>File Path</th>
+            <th>Download Size (MB)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="file : ${topDownloadFiles}">
+            <td th:text="${file.split(' ')[0]}"></td>
+            <td th:text="${file.split(' ')[1]}" ></td>
+        </tr>
+        </tbody>
+    </table>
+
+
     <h2 class="ui header">Download Speed (MB per Second) Over Time</h2>
 
     <!-- 创建一个用于展示下载速度的 ECharts 图表的 div -->

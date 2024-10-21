@@ -35,21 +35,21 @@ public class LogController {
     // Speed analysis page, now receiving the parsed logs from the model
     @GetMapping("/requestLog")
     public String getRequestLog(Model model) {
-        // Get the parsed logs from the model
         List<RequestLog> logs = (List<RequestLog>) model.asMap().get("logs");
 
-        // Ensure logs are not null
         if (logs == null || logs.isEmpty()) {
-            return "error";  // Return an error page if logs are missing
+            return "error";
         }
 
-        // Perform the speed analysis
+        // Existing speed analysis calculations (unchanged)
         List<String> timeLabels = new ArrayList<>();
         Map<Long, Long> totalDownloadSizePerSecond = new TreeMap<>();
         Map<Long, Double> totalDurationPerSecond = new TreeMap<>();
         Map<Long, Integer> concurrentConnectionsMap = new TreeMap<>();
 
-        // Iterate over logs to perform the analysis
+        // Use a Map to store unique file paths and their total data size for de-duplication
+        Map<String, Long> downloadFilesMap = new TreeMap<>();
+
         for (RequestLog log : logs) {
             if (log.getDataSize() < 0) continue;
 
@@ -58,11 +58,25 @@ public class LogController {
             concurrentConnectionsMap.put(timestampInSeconds, concurrentConnectionsMap.getOrDefault(timestampInSeconds, 0) + 1);
             totalDownloadSizePerSecond.put(timestampInSeconds, totalDownloadSizePerSecond.getOrDefault(timestampInSeconds, 0L) + log.getDataSize());
             totalDurationPerSecond.put(timestampInSeconds, totalDurationPerSecond.getOrDefault(timestampInSeconds, 0.0) + log.getRequestDuration() / 1000.0);
+
+            // Put file path and data size into the map to ensure uniqueness
+            downloadFilesMap.put(log.getRequestPath(), downloadFilesMap.getOrDefault(log.getRequestPath(), 0L) + log.getDataSize());
         }
 
+        // Sort by download size in descending order and pick top 10
+        List<Map.Entry<String, Long>> topDownloads = downloadFilesMap.entrySet().stream()
+                .sorted((entry1, entry2) -> Long.compare(entry2.getValue(), entry1.getValue()))
+                .limit(10)
+                .collect(Collectors.toList());
+
+        // Collect file names and sizes for the top 10 downloads
+        List<String> topDownloadFiles = topDownloads.stream()
+                .map(entry -> entry.getKey() + " (" + entry.getValue() / 1024 / 1024 + "MB)")  // Convert size to MB, no decimals
+                .collect(Collectors.toList());
+
+        // Existing calculations for download speeds, requested volumes, etc.
         List<Double> downloadSpeeds = new ArrayList<>();
         List<Double> requestedVolumes = new ArrayList<>();
-
         for (Long timestamp : totalDownloadSizePerSecond.keySet()) {
             long totalDownloadSize = totalDownloadSizePerSecond.get(timestamp);
             double totalDuration = totalDurationPerSecond.get(timestamp);
@@ -88,13 +102,18 @@ public class LogController {
                 .map(label -> "\"" + label + "\"")
                 .collect(Collectors.joining(", ")) + "]";
 
+        // Add attributes for the existing charts
         model.addAttribute("timeLabelsForJs", timeLabelsForJs);
         model.addAttribute("downloadSpeeds", downloadSpeeds);
         model.addAttribute("requestedVolumes", requestedVolumes);
         model.addAttribute("concurrentConnections", concurrentConnections);
 
+        // Add attribute for top 10 downloads
+        model.addAttribute("topDownloadFiles", topDownloadFiles);
+
         return "requestLog";
     }
+
 
     // Method to parse the uploaded log file
     private List<RequestLog> parseLogFile(MultipartFile logFile) {
